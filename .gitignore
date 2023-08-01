@@ -1,0 +1,79 @@
+# Gradle files
+.gradle/
+/build
+build/
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+
+# Local configuration file (sdk path, etc)
+/local.properties
+local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+/captures
+captures/
+.externalNativeBuild
+.cxx
+.externalNativeBuild/
+.cxx/
+output.json
+
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# IntelliJ
+*.iml
+.idea
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof
+
+# Version control
+vcs.xml
+
+# lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+# lint/reports/
+
+# macOS specific files (optional, only for macOS users)
+.DS_Store

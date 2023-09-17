@@ -1,7 +1,8 @@
-package com.dilan.kamuda.houseownerapp
+package com.dilan.kamuda.houseownerapp.feature.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dilan.kamuda.houseownerapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

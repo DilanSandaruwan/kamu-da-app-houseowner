@@ -77,3 +77,8 @@ lint/tmp/
 
 # macOS specific files (optional, only for macOS users)
 .DS_Store
+
+#mysecret
+.mysecret
+mysecret/
+/mysecret

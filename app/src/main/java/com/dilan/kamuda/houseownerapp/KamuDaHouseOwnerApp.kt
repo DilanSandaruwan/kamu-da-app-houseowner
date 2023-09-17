@@ -1,4 +1,8 @@
 package com.dilan.kamuda.houseownerapp
 
-class KamuDaHouseOwnerApp {
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class KamuDaHouseOwnerApp : Application() {
 }

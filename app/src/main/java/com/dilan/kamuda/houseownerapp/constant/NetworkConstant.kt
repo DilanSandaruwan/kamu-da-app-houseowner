@@ -1,6 +1,6 @@
 package com.dilan.kamuda.houseownerapp.constant
 
-import com.dilan.kamuda.houseownerapp.mysecret.route_url
+import com.dilan.kamuda.houseownerapp.common.model.mysecret.route_url
 
 object NetworkConstant {
     //const val BASE_URL = mockapi_url

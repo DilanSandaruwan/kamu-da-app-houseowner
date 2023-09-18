@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dilan.kamuda.houseownerapp.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MealFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

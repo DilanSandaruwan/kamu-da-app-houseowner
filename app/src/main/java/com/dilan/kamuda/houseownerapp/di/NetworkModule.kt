@@ -1,6 +1,7 @@
 package com.dilan.kamuda.houseownerapp.di
 
 import com.dilan.kamuda.houseownerapp.constant.NetworkConstant.BASE_URL
+import com.dilan.kamuda.houseownerapp.feature.menu.MenuRepository
 import com.dilan.kamuda.houseownerapp.network.utils.OrderApiService
 import dagger.Module
 import dagger.Provides
@@ -66,6 +67,12 @@ object NetworkModule {
     @Provides
     fun provideOrderApiService(retrofit: Retrofit): OrderApiService {
         return retrofit.create(OrderApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMenuRepository(orderApiService: OrderApiService): MenuRepository {
+        return MenuRepository(orderApiService)
     }
 
 }

@@ -1,9 +1,9 @@
-package com.dilan.kamuda.houseownerapp.feature.menu.model
+package com.dilan.kamuda.houseownerapp.feature.add.model
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class FoodMenu(
+data class AddNewMenu(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("price") var price: Double,

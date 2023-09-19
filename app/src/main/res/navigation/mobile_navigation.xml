@@ -25,4 +25,8 @@
         android:name="com.dilan.kamuda.houseownerapp.feature.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/addNewFragment"
+        android:name="com.dilan.kamuda.houseownerapp.feature.add.AddNewFragment"
+        android:label="AddNewFragment" />
 </navigation>

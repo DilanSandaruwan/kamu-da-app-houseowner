@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.fragments.order.CreateOrderFragment">
+        tools:context=".feature.add.AddNewFragment">
 
         <LinearLayout
             android:id="@+id/header"
@@ -37,7 +37,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/title_make_order"
+                android:text="@string/title_menu"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -97,7 +97,7 @@
             android:id="@+id/btnUpdateMenu"
             android:layout_width="220dp"
             android:layout_height="48dp"
-            android:layout_alignBaseline="@+id/tvTotal"
+            android:layout_alignBaseline="@+id/btnAddNew"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="40dp"
@@ -106,20 +106,25 @@
             android:enabled="false"
             android:textSize="18sp"
             android:textAlignment="center"
-            android:text="@string/check_out" />
+            android:text="@string/update" />
 
-        <TextView
-            android:id="@+id/tvTotal"
-            android:layout_width="100dp"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddNew"
+            android:layout_width="220dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/btnUpdateMenu"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:text="0.00"
-            android:textSize="18sp" />
+            android:enabled="true"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:text="@string/title_my_add"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </layout>

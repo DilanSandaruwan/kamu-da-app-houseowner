@@ -9,10 +9,15 @@
         android:icon="@drawable/ic_baseline_order_24dp"
         android:title="@string/title_order" />
 
+<!--    <item-->
+<!--        android:id="@+id/mealFragment"-->
+<!--        android:icon="@drawable/ic_baseline_meal_24dp"-->
+<!--        android:title="@string/title_meal" />-->
+
     <item
-        android:id="@+id/mealFragment"
-        android:icon="@drawable/ic_baseline_meal_24dp"
-        android:title="@string/title_meal" />
+        android:id="@+id/addNewFragment"
+        android:icon="@drawable/ic_baseline_add_circle_24dp"
+        android:title="@string/title_my_add" />
 
     <item
         android:id="@+id/menuFragment"

@@ -9,4 +9,5 @@ object NetworkConstant {
 
     const val ENDPOINT_MENU = "menu/all"
     const val ENDPOINT_MENU_UPDATE = "menu/update"
+    const val ENDPOINT_MENU_SAVE = "menu/save"
 }

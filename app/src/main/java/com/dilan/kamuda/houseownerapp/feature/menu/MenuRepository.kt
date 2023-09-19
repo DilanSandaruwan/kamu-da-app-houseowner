@@ -38,4 +38,17 @@ class MenuRepository @Inject constructor(
         }
         return emptyList()
     }
+
+    suspend fun saveMenuItemInDataSource(item:FoodMenu): FoodMenu? {
+        return withContext(Dispatchers.IO){
+            return@withContext saveMenuItemInRemoteSource(item)
+        }
+    }
+    private suspend fun saveMenuItemInRemoteSource(item:FoodMenu) :FoodMenu?{
+        val response = orderApiService.saveMenuItem(item)
+        if (response.isSuccessful) {
+            return response.body()
+        }
+        return null
+    }
 }

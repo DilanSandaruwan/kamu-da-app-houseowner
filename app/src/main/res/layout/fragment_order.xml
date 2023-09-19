@@ -33,7 +33,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/title_menu"
+                android:text="@string/title_order"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />

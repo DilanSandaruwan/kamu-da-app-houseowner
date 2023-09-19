@@ -5,6 +5,7 @@ import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 
 interface OrderApiService {
@@ -12,5 +13,7 @@ interface OrderApiService {
     suspend fun getMenuListForMeal(): Response<List<FoodMenu>>
 
     @PUT(NetworkConstant.ENDPOINT_MENU_UPDATE)
-    fun updateMenuList(@Body list: List<FoodMenu>): Response<List<FoodMenu>?>
+    suspend fun updateMenuList(@Body list: List<FoodMenu>): Response<List<FoodMenu>?>
+    @POST(NetworkConstant.ENDPOINT_MENU_SAVE)
+    suspend fun saveMenuItem(@Body item: FoodMenu): Response<FoodMenu>
 }

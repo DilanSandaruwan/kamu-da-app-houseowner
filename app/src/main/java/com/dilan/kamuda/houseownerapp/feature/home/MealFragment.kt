@@ -1,4 +1,4 @@
-package com.dilan.kamuda.houseownerapp.feature.meal
+package com.dilan.kamuda.houseownerapp.feature.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,7 +1,9 @@
 package com.dilan.kamuda.houseownerapp.di
 
 import com.dilan.kamuda.houseownerapp.constant.NetworkConstant.BASE_URL
+import com.dilan.kamuda.houseownerapp.feature.home.HomeRepository
 import com.dilan.kamuda.houseownerapp.feature.menu.MenuRepository
+import com.dilan.kamuda.houseownerapp.feature.order.OrderRepository
 import com.dilan.kamuda.houseownerapp.network.utils.OrderApiService
 import dagger.Module
 import dagger.Provides
@@ -73,6 +75,18 @@ object NetworkModule {
     @Provides
     fun provideMenuRepository(orderApiService: OrderApiService): MenuRepository {
         return MenuRepository(orderApiService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideHomeRepository(orderApiService: OrderApiService): HomeRepository {
+        return HomeRepository(orderApiService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideOrderRepository(orderApiService: OrderApiService): OrderRepository {
+        return OrderRepository(orderApiService)
     }
 
 }

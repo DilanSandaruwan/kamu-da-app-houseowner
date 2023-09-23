@@ -9,7 +9,7 @@
     <string name="title_my_order">My Order</string>
     <string name="title_my_add">Add New</string>
     <string name="title_make_order">Make Order</string>
-    <string name="date_for_order">2023-08-23</string>
+    <string name="date_for_order">2023-09-21</string>
     <string name="meal_name">Breakfast</string>
     <string name="place_order">Place Order</string>
     <string name="check_out">Check Out</string>
@@ -19,4 +19,8 @@
     <string name="update">Update</string>
     <string name="enter_menu_name">ex: Rice \&amp; Curry - Chicken</string>
     <string name="enter_unit_price">ex: 123.00</string>
+    <string name="lbl_rejected">Rejected</string>
+    <string name="lbl_all">All</string>
+    <string name="lbl_pending">Pending...</string>
+    <string name="lbl_accepted">Accepted</string>
 </resources>

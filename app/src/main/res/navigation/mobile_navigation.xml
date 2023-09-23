@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_order" />
     <fragment
         android:id="@+id/mealFragment"
-        android:name="com.dilan.kamuda.houseownerapp.feature.meal.MealFragment"
+        android:name="com.dilan.kamuda.houseownerapp.feature.home.MealFragment"
         android:label="fragment_meal"
         tools:layout="@layout/fragment_meal" />
     <fragment
@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_menu" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.dilan.kamuda.houseownerapp.feature.HomeFragment"
+        android:name="com.dilan.kamuda.houseownerapp.feature.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment

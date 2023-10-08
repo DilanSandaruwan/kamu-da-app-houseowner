@@ -1,5 +1,6 @@
 package com.dilan.kamuda.houseownerapp.feature.menu
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.dilan.kamuda.houseownerapp.R
+import com.dilan.kamuda.houseownerapp.common.util.component.RoundedImageView
 import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textview.MaterialTextView
 
 class HouseMenuAdapter(
+    private val context: MenuFragment,
     private val itemClickListener: OnItemClickListener,
     private val checkedItemListener: CheckedItemListener,
 ) : ListAdapter<FoodMenu, HouseMenuAdapter.ViewHolder>(diff_util) {
@@ -34,6 +39,7 @@ class HouseMenuAdapter(
         val cbxOrderItem: MaterialCheckBox = view.findViewById(R.id.mcbOrderItem)
         val btnIncrement: ImageButton = view.findViewById(R.id.btnIncrement)
         val btnDecrement: ImageButton = view.findViewById(R.id.btnDecrement)
+        val ivRoundedImageView: RoundedImageView = view.findViewById(R.id.ivRoundMenuItem)
         val tvItemCount: TextView = view.findViewById(R.id.tvItemCount)
     }
 
@@ -67,7 +73,19 @@ class HouseMenuAdapter(
         holder.itemName.text = item.name.toString()
         holder.itemPrice.text = item.price.toString()
         holder.tvItemCount.text = item.price.toString()
-        holder.cbxOrderItem.isChecked = item in checkedItems
+        if (item.image != null) {
+            var imageBitmap =
+                BitmapFactory.decodeByteArray(item.image as ByteArray?, 0, item.image.size)
+            Glide.with(context)
+                .load(imageBitmap)
+                .diskCacheStrategy(
+                    DiskCacheStrategy.ALL
+                )
+                .into(holder.ivRoundedImageView)
+        }
+        holder.cbxOrderItem.isChecked =
+            !(item.status.isNullOrBlank() || "N".equals(item.status, true))
+        //holder.cbxOrderItem.isChecked = item in checkedItems
 
         holder.cbxOrderItem.setOnCheckedChangeListener { _, isChecked ->
             checkedItemListener.onItemChecked(item, isChecked) // Call the callback method

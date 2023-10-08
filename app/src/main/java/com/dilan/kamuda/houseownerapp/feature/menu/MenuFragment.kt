@@ -1,9 +1,11 @@
 package com.dilan.kamuda.houseownerapp.feature.menu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,9 +15,6 @@ import com.dilan.kamuda.houseownerapp.R
 import com.dilan.kamuda.houseownerapp.databinding.FragmentMenuBinding
 import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @AndroidEntryPoint
 class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
@@ -46,7 +45,7 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
         val _layoutManager = LinearLayoutManager(requireContext())
         val _dividerItemDecoration =
             DividerItemDecoration(requireContext(), _layoutManager.orientation)
-        adapter = HouseMenuAdapter(object :
+        adapter = HouseMenuAdapter(this, object :
             HouseMenuAdapter.OnItemClickListener {
 
             override fun itemClick(item: FoodMenu) {
@@ -60,27 +59,32 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
             it.adapter = adapter
         }
 
-//        binding.btnUpdateMenu.setOnClickListener {
-//            val checkedItems = adapter.getCheckedItemsList()
-//
-//            val dialogFragment = CustomDialogFragment.newInstance(
-//                title = "Order Confirmation",
-//                message = "Please press Confirm if you sure to confirm the order.",
-//                positiveButtonText = "Confirm",
-//                negativeButtonText = "Cancel",
-//                checkedItems = checkedItems
-//            )
-//            dialogFragment.setPositiveActionListener { setOrderDetails(checkedItems) }
-//            dialogFragment.show(childFragmentManager, "custom_dialog")
-//
-//        }
+        binding.btnUpdateMenu.setOnClickListener {
+            val changedItems = viewModel.menuList.value
+
+            if (changedItems != null) {
+                val dialogFragment = CustomDialogFragmentMenu.newInstance(
+                    title = "Menu Update Confirmation",
+                    message = "Please press Confirm if you sure to confirm the changes.",
+                    positiveButtonText = "Confirm",
+                    negativeButtonText = "Cancel",
+                )
+                dialogFragment.setPositiveActionListener { setUpdatedMenuDetails(changedItems) }
+                dialogFragment.show(childFragmentManager, "custom_dialog")
+            } else {
+                Toast.makeText(context, "Nothing in the changed list", Toast.LENGTH_LONG).show()
+
+            }
+
+
+        }
 
         viewModel.menuList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
         viewModel.checkedItems.observe(viewLifecycleOwner) { it ->
-
+            Log.e("RECURSIVE", "onViewCreated: chcesklflksfslkfllkfsfs")
             binding.btnUpdateMenu.isEnabled = !it.any { it.price == 0.00 }
             adapter.setCheckedItems(it)
         }
@@ -92,25 +96,34 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
         viewModel.resetList.observe(viewLifecycleOwner) {
 
         }
+
+        viewModel.listChanged.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.getMenuListForMeal("breakfast")
+            }
+        }
     }
+
     override fun onItemChecked(item: FoodMenu, isChecked: Boolean) {
         val updatedCheckedItems = viewModel.checkedItems.value?.toMutableList() ?: mutableListOf()
         if (isChecked) {
+            item.status = "Y"
             if (!updatedCheckedItems.contains(item)) {
                 updatedCheckedItems.add(item)
             }
         } else {
+            item.status = "N"
             updatedCheckedItems.remove(item)
         }
         viewModel.setCheckedItemsList(updatedCheckedItems)
     }
 
-    private fun setMenuDetails(checkedItems: List<FoodMenu>) {
+    private fun setUpdatedMenuDetails(changedItems: List<FoodMenu>) {
         var mutableList = mutableListOf<FoodMenu>()
-        for (i in checkedItems) {
-            mutableList.add(FoodMenu(i.id, i.name, i.price, i.status))
+        for (i in changedItems) {
+            mutableList.add(FoodMenu(i.id, i.name, i.price, i.status, i.image))
         }
-        //viewModel.updateMenuTable(myOrder)
+        viewModel.updateMenuTable(mutableList)
     }
 
 }

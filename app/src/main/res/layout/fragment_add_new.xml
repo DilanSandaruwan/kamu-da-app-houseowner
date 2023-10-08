@@ -74,8 +74,8 @@
             android:id="@+id/lytNewItemPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_below="@+id/lytNewItemName"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -93,9 +93,9 @@
                         android:id="@+id/mtv_new_item_unit_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
                         android:digits="0123456789."
-                        android:hint="@string/enter_unit_price" />
+                        android:hint="@string/enter_unit_price"
+                        android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -123,11 +123,33 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
+            android:id="@+id/btnChooseItemImg"
             android:layout_width="wrap_content"
-            android:id="@+id/btnAddNewMenu"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lytNewItemPrice"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="36dp"
+            android:backgroundTint="@color/black"
+            android:text="SELECT IMAGE"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <com.dilan.kamuda.houseownerapp.common.util.component.RoundedImageView
+            android:id="@+id/ivChooseItemImg"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/btnChooseItemImg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddNewMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivChooseItemImg"
             android:layout_alignParentRight="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"

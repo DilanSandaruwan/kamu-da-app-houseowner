@@ -78,7 +78,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:background="@color/teal_200"
+                android:background="@color/green"
                 android:gravity="center"
                 android:text="@string/lbl_accepted"
                 android:textColor="@color/black"
@@ -92,10 +92,10 @@
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:background="@color/teal_200"
+                android:background="@color/red"
                 android:gravity="center"
                 android:text="@string/lbl_rejected"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

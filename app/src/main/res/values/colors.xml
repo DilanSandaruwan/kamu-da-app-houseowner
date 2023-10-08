@@ -10,7 +10,9 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#18E601</color>
     <color name="green">#FF18E601</color>
-    <color name="yellow">#FFFF9800</color>
+    <color name="orange">#FFFF9800</color>
+    <color name="yellow">#FFFFEB3B</color>
+    <color name="red">#FFF44336</color>
     <color name="light_grey">#FAFAFA</color>
     <color name="light_blue">#DC00F80A</color>
 

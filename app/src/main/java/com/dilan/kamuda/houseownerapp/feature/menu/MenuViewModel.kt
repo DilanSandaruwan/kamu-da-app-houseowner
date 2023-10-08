@@ -1,7 +1,6 @@
 package com.dilan.kamuda.houseownerapp.feature.menu
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,6 +37,10 @@ constructor(
     val resetList: LiveData<Boolean>
         get() = _resetList
 
+    private val _listChanged = MutableLiveData<Boolean>(false)
+    val listChanged: LiveData<Boolean>
+        get() = _listChanged
+
 
     fun getMenuListForMeal(meal: String) {
         viewModelScope.launch {
@@ -55,7 +58,13 @@ constructor(
     fun updateMenuTable(myOrder: List<FoodMenu>) {
 
         viewModelScope.launch {
-            //val res = menuRepository.updateMenuListInDataSource(myOrder)
+            val res = menuRepository.updateMenuListInDataSource(myOrder)
+            if (res.isNullOrEmpty()) {
+
+            } else {
+                _listChanged.postValue(true)
+                _resetList.postValue(true)
+            }
         }
     }
 

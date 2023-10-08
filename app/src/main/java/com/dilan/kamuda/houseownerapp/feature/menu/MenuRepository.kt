@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class MenuRepository @Inject constructor(
     private val orderApiService: OrderApiService,
-){
+) {
 
     private val TAG = "MenuRepository"
     suspend fun getMenuListForMealFromDataSource(): List<FoodMenu>? {
@@ -20,12 +20,32 @@ class MenuRepository @Inject constructor(
     private suspend fun getResponseFromRemoteService(): List<FoodMenu>? {
         val response = orderApiService.getMenuListForMeal()
         if (response.isSuccessful) {
-            return response.body()
+            var modifiedResponseBody = mutableListOf<FoodMenu>()
+            var originalResponseBody = response.body()
+//            var bitmap: Bitmap? = null
+            var bitmap: ByteArray?
+            originalResponseBody?.let {
+                for (item in originalResponseBody) {
+
+                    bitmap = if (item.image != null) {
+                        val imageData =
+                            android.util.Base64.decode(item.image, android.util.Base64.DEFAULT)
+                        imageData
+                        //BitmapFactory.decodeByteArray(imageData,0,imageData.size)
+                    } else {
+                        null
+                    }
+                    modifiedResponseBody.add(
+                        FoodMenu(item.id, item.name, item.price, item.status, bitmap)
+                    )
+                }
+            }
+            return modifiedResponseBody
         }
         return emptyList()
     }
 
-    suspend fun updateMenuListInDataSource(list: List<FoodMenu>): Any? {
+    suspend fun updateMenuListInDataSource(list: List<FoodMenu>): List<FoodMenu>? {
         return withContext(Dispatchers.IO) {
             return@withContext updateMenuListInRemoteSource(list)
         }
@@ -39,12 +59,13 @@ class MenuRepository @Inject constructor(
         return emptyList()
     }
 
-    suspend fun saveMenuItemInDataSource(item:FoodMenu): FoodMenu? {
-        return withContext(Dispatchers.IO){
+    suspend fun saveMenuItemInDataSource(item: FoodMenu): FoodMenu? {
+        return withContext(Dispatchers.IO) {
             return@withContext saveMenuItemInRemoteSource(item)
         }
     }
-    private suspend fun saveMenuItemInRemoteSource(item:FoodMenu) :FoodMenu?{
+
+    private suspend fun saveMenuItemInRemoteSource(item: FoodMenu): FoodMenu? {
         val response = orderApiService.saveMenuItem(item)
         if (response.isSuccessful) {
             return response.body()

@@ -157,7 +157,7 @@ class OrderAdapter(
             itemClickListener.itemClick(item.id, "accepted")
         }
         holder.btnOrderReady.setOnClickListener {
-            itemClickListener.itemClick(item.id, "ready")
+            itemClickListener.itemClick(item.id, "completed")
         }
 
     }

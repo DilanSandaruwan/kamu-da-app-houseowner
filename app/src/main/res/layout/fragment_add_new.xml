@@ -12,6 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black"
         tools:context=".feature.add.AddNewFragment">
 
         <LinearLayout
@@ -48,13 +49,17 @@
                 android:layout_gravity="center_vertical"
                 android:background="@color/transparent" />
         </LinearLayout>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header"
+        android:padding="10dp"
+        android:background="@drawable/bg_top_curved_white">
         <LinearLayout
             android:id="@+id/lytNewItemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/header"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -143,6 +148,7 @@
             android:layout_height="200dp"
             android:layout_below="@+id/btnChooseItemImg"
             android:layout_centerHorizontal="true"
+            android:src="@drawable/img_food_dish"
             android:layout_marginTop="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -166,6 +172,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
             android:visibility="gone" />
+    </RelativeLayout>
 
     </RelativeLayout>
 </layout>

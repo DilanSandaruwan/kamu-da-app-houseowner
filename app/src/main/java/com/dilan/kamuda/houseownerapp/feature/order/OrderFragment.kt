@@ -63,6 +63,7 @@ class OrderFragment : Fragment() {
 
         viewModel.ordersList.observe(viewLifecycleOwner) { listOfOrders ->
             if (listOfOrders.isNotEmpty()) {
+                binding.tvOrdersLoading.visibility = View.GONE
                 binding.tvNoOrdersYet.visibility = View.GONE
                 binding.rvViewOrderDetails.visibility = View.VISIBLE
                 viewModel.pendingList.value = listOfOrders.filter { it.status == "pending" }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dilan.kamuda.houseownerapp.R
 import com.dilan.kamuda.houseownerapp.databinding.FragmentHomeBinding
 import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity.Companion.kamuDaSecurePreference
 import com.dilan.kamuda.houseownerapp.feature.order.ViewOrderedItemsAdapter
 import com.dilan.kamuda.houseownerapp.feature.order.model.OrderDetail
 import com.google.android.material.divider.MaterialDivider
@@ -33,6 +34,13 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: HomeAdapter
     private var latestOrderDetail: OrderDetail? = null
     private lateinit var mainActivity: MainActivity
+
+    override fun onResume() {
+        super.onResume()
+        context?.let { kamuDaSecurePreference.getCustomerID(it).toInt() }
+            ?.let { viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted)) }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity = requireActivity() as MainActivity
@@ -59,7 +67,14 @@ class HomeFragment : Fragment() {
             mainActivity.showProgress(it)
         }
         viewModel.showErrorPopup.observe(viewLifecycleOwner) {
-            mainActivity.showErrorPopup(it)
+            val dialogFragment = mainActivity.showErrorPopup(it).apply {
+                setPositiveActionListener {
+                    viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted))
+                }
+                setNegativeActionListener {
+                }
+            }
+            dialogFragment.show(childFragmentManager, "custom_dialog")
         }
     }
 

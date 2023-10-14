@@ -200,7 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="Latest Order"
+                    android:text="First Priority Order"
                     android:textColor="@color/btn_dark_blue"
                     android:textSize="20sp"
                     android:textStyle="bold" />

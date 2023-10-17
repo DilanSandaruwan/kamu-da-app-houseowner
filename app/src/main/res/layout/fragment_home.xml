@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -64,6 +65,7 @@
                 android:textSize="14sp"
                 android:textStyle="italic" />
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/lytOrderSummary"
             android:layout_width="match_parent"
@@ -71,8 +73,8 @@
             android:layout_below="@+id/lytImageView"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
@@ -93,13 +95,22 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvAllPendingCount"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="8dp"
                     android:gravity="center"
                     android:text="0"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_gravity="bottom"
+                    android:rotation="180"
+                    app:dividerColor="@color/yellow" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -120,13 +131,22 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvAllAcceptedCount"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="8dp"
                     android:gravity="center"
                     android:text="0"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_gravity="bottom"
+                    android:rotation="180"
+                    app:dividerColor="@color/green" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -147,13 +167,22 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvAllCompletedCount"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="8dp"
                     android:gravity="center"
                     android:text="0"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_gravity="bottom"
+                    android:rotation="180"
+                    app:dividerColor="@color/semi_transparent" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -174,15 +203,25 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvAllRejectedCount"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="8dp"
                     android:gravity="center"
                     android:text="0"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_gravity="bottom"
+                    android:rotation="180"
+                    app:dividerColor="@color/redish" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

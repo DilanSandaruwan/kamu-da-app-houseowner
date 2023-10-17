@@ -16,7 +16,7 @@ interface OrderApiService {
     suspend fun getMenuListForMeal(): Response<List<FoodMenuGetType>>
 
     @GET(NetworkConstant.ENDPOINT_GET_ORDERS_ALL)
-    suspend fun getOrdersListForMeal(): Response<List<OrderDetail>>
+    suspend fun getOrdersListForAll(): Response<List<OrderDetail>>
 
     @GET(NetworkConstant.ENDPOINT_GET_ORDERS_BY_STATE)
     suspend fun getOrdersListByStatus(@Path("status") status: String): Response<List<OrderDetail>>

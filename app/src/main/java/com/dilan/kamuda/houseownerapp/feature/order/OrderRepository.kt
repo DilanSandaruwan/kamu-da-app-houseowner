@@ -17,7 +17,7 @@ class OrderRepository @Inject constructor(
     }
 
     private suspend fun getOrdersListFromRemoteSource(): List<OrderDetail> {
-        val response = orderApiService.getOrdersListForMeal()
+        val response = orderApiService.getOrdersListForAll()
         if (response.isSuccessful) {
             return response.body() ?: emptyList()
         }

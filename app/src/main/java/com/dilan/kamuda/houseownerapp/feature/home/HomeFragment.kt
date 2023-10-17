@@ -38,7 +38,10 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         context?.let { kamuDaSecurePreference.getCustomerID(it).toInt() }
-            ?.let { viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted)) }
+            ?.let {
+                //viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted))
+                viewModel.getOrdersListForAllFromDataSource()
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +64,28 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.latestOrder.observe(viewLifecycleOwner) {
             latestOrderDetail = it
-            manageLatestOrder()
+            manageFirstPriorityOrder()
+        }
+
+        viewModel.allOrders.observe(viewLifecycleOwner) { allOrdersList ->
+            if (allOrdersList != null && allOrdersList.isNotEmpty()) {
+                binding.mtvAllPendingCount.text = allOrdersList.count {
+                    it.status == getString(R.string.order_status_pending)
+                }.toString()
+                binding.mtvAllAcceptedCount.text = allOrdersList.count {
+                    it.status == getString(R.string.order_status_accepted)
+                }.toString()
+                binding.mtvAllCompletedCount.text = allOrdersList.count {
+                    it.status == getString(R.string.order_status_completed)
+                }.toString()
+                binding.mtvAllRejectedCount.text = allOrdersList.count {
+                    it.status == getString(R.string.order_status_rejected)
+                }.toString()
+            }
+            latestOrderDetail =
+                allOrdersList.filter { it.status == getString(R.string.order_status_accepted) }
+                    .minByOrNull { it.id }
+            manageFirstPriorityOrder()
         }
         viewModel.showLoader.observe(viewLifecycleOwner) {
             mainActivity.showProgress(it)
@@ -69,16 +93,18 @@ class HomeFragment : Fragment() {
         viewModel.showErrorPopup.observe(viewLifecycleOwner) {
             val dialogFragment = mainActivity.showErrorPopup(it).apply {
                 setPositiveActionListener {
-                    viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted))
+                    //viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted))
+                    viewModel.getOrdersListForAllFromDataSource()
                 }
                 setNegativeActionListener {
+
                 }
             }
             dialogFragment.show(childFragmentManager, "custom_dialog")
         }
     }
 
-    private fun manageLatestOrder() {
+    private fun manageFirstPriorityOrder() {
         if (latestOrderDetail == null) {
             binding.lytLatestOrderLoading.visibility = View.GONE
             binding.lytLatestOrderNot.visibility = View.VISIBLE

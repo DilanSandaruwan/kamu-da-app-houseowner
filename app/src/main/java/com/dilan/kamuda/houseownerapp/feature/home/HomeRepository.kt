@@ -33,4 +33,24 @@ class HomeRepository @Inject constructor(
 
     }
 
+    suspend fun getOrdersListForAllFromDataSource(): ApiState<List<OrderDetail>> {
+        return withContext(Dispatchers.IO) {
+            return@withContext (getOrdersListForAllFromRemoteSource())
+        }
+    }
+
+    private suspend fun getOrdersListForAllFromRemoteSource(): ApiState<List<OrderDetail>> {
+        return try {
+            val response = orderApiService.getOrdersListForAll()
+            if (response.isSuccessful) {
+                ApiState.Success(response.body() ?: emptyList())
+            } else {
+                ApiState.Failure("Server Error")
+            }
+        } catch (exception: Exception) {
+            ApiState.Failure(exception.message.toString())
+        }
+    }
+
+
 }

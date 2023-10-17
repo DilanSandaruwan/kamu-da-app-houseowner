@@ -22,6 +22,10 @@ class HomeViewModel @Inject constructor(
     val latestOrder: LiveData<OrderDetail?>
         get() = _latestOrder
 
+    private val _allOrders = MutableLiveData<List<OrderDetail>>()
+    val allOrders: LiveData<List<OrderDetail>>
+        get() = _allOrders
+
     private val _showLoader = MutableLiveData<Boolean>()
     val showLoader: LiveData<Boolean> = _showLoader
 
@@ -40,6 +44,45 @@ class HomeViewModel @Inject constructor(
                         })
                     } else {
                         _latestOrder.postValue(null)
+                    }
+                }
+
+                is ApiState.Failure -> {
+
+                    val kamuDaPopup = KamuDaPopup(
+                        "Error",
+                        if (res.msg.contains("after")) {
+                            "Server Error or not founnd"
+                        } else if (res.msg.contains("Failed to connect to /", ignoreCase = false)) {
+                            "No internet connection"
+                        } else {
+                            res.msg.toString()
+                        },
+                        "Retry",
+                        "Cancel",
+                        2
+                    )
+                    _showErrorPopup.postValue(kamuDaPopup)
+                    //_showLoader.postValue(false)
+                }
+
+                is ApiState.Loading -> {
+                    //_showLoader.postValue(true)
+                }
+            }
+        }
+    }
+
+    fun getOrdersListForAllFromDataSource() {
+        viewModelScope.launch {
+            //_showLoader.postValue(true)
+            when (val res = homeRepository.getOrdersListForAllFromDataSource()) {
+                is ApiState.Success -> {
+                    // _showLoader.postValue(false)
+                    if (res.data != null) {
+                        _allOrders.postValue(res.data!!)
+                    } else {
+                        _allOrders.postValue(emptyList())
                     }
                 }
 

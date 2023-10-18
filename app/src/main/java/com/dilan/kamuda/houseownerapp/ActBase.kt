@@ -3,14 +3,14 @@ package com.dilan.kamuda.houseownerapp
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.dilan.kamuda.customerapp.model.specific.KamuDaPopup
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
 import com.dilan.kamuda.houseownerapp.common.util.KamuDaSecurePreference
 import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 
 /***
  * use as a abstract class for the app features
  */
-abstract class ActBase : AppCompatActivity(){
+abstract class ActBase : AppCompatActivity() {
     open fun showProgress(show: Boolean) {
         val progressBarHolder = findViewById<RelativeLayout>(R.id.rippleHolder)
         if (show) {

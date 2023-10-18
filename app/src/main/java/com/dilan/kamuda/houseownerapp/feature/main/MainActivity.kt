@@ -1,7 +1,8 @@
 package com.dilan.kamuda.houseownerapp.feature.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,9 +21,12 @@ class MainActivity : ActBase() {
     companion object {
         var kamuDaSecurePreference = KamuDaSecurePreference()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        kamuDaSecurePreference.clearSharedPrefKeys(this)
 
         val navView: BottomNavigationView = binding.navView
 

@@ -21,6 +21,7 @@ import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
 import com.dilan.kamuda.houseownerapp.feature.main.MainActivity.Companion.kamuDaSecurePreference
 import com.dilan.kamuda.houseownerapp.feature.order.ViewOrderedItemsAdapter
 import com.dilan.kamuda.houseownerapp.feature.order.model.OrderDetail
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.divider.MaterialDivider
 import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,6 @@ class HomeFragment : Fragment() {
         super.onResume()
         context?.let { kamuDaSecurePreference.getCustomerID(it).toInt() }
             ?.let {
-                //viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted))
                 viewModel.getOrdersListForAllFromDataSource()
             }
     }
@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.latestOrder.observe(viewLifecycleOwner) {
             latestOrderDetail = it
             manageFirstPriorityOrder()
@@ -87,13 +88,19 @@ class HomeFragment : Fragment() {
                     .minByOrNull { it.id }
             manageFirstPriorityOrder()
         }
+
         viewModel.showLoader.observe(viewLifecycleOwner) {
+            if (it) {
+                mainActivity.binding.navView.visibility = View.GONE
+            } else {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+            }
             mainActivity.showProgress(it)
         }
+
         viewModel.showErrorPopup.observe(viewLifecycleOwner) {
             val dialogFragment = mainActivity.showErrorPopup(it).apply {
                 setPositiveActionListener {
-                    //viewModel.getLatestOrderOfCustomerByStatus(getString(R.string.order_status_accepted))
                     viewModel.getOrdersListForAllFromDataSource()
                 }
                 setNegativeActionListener {
@@ -102,6 +109,19 @@ class HomeFragment : Fragment() {
             }
             dialogFragment.show(childFragmentManager, "custom_dialog")
         }
+
+        viewModel.showErrorPage.observe(viewLifecycleOwner) {
+            if (it) {
+                showCommonErrorScreen()
+            }
+        }
+
+        binding.lytCommonErrorScreenIncluded.findViewById<MaterialButton>(R.id.mbtnCommonErrorScreen)
+            .setOnClickListener {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+                viewModel.getOrdersListForAllFromDataSource()
+                binding.lytCommonErrorScreenIncluded.visibility = View.GONE
+            }
     }
 
     private fun manageFirstPriorityOrder() {
@@ -214,6 +234,11 @@ class HomeFragment : Fragment() {
                 }
 
         }
+    }
+
+    private fun showCommonErrorScreen() {
+        mainActivity.binding.navView.visibility = View.GONE
+        binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
     }
 
 }

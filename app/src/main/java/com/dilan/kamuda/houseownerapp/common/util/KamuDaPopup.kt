@@ -1,4 +1,4 @@
-package com.dilan.kamuda.customerapp.model.specific
+package com.dilan.kamuda.houseownerapp.common.util
 
 import java.io.Serializable
 

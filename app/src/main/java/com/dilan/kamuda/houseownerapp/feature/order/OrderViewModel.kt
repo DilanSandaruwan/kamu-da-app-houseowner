@@ -17,11 +17,11 @@ class OrderViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
-    var currentlySelectedGroup = "pending"
+    var currentlySelectedGroup = "accepted"
     // Define three MutableLists for different order statuses
     val pendingList = MutableLiveData<List<OrderDetail>>()
     val acceptedList = MutableLiveData<List<OrderDetail>>()
-    val rejectedList = MutableLiveData<List<OrderDetail>>()
+    val completedList = MutableLiveData<List<OrderDetail>>()
 
     private val _ordersList = MutableLiveData<List<OrderDetail>>()
     val ordersList: LiveData<List<OrderDetail>>

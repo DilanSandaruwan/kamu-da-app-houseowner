@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -68,12 +69,19 @@ class OrderFragment : Fragment() {
                 binding.rvViewOrderDetails.visibility = View.VISIBLE
                 viewModel.pendingList.value = listOfOrders.filter { it.status == "pending" }
                 viewModel.acceptedList.value = listOfOrders.filter { it.status == "accepted" }
-                viewModel.rejectedList.value = listOfOrders.filter { it.status == "rejected" }
+                viewModel.completedList.value = listOfOrders.filter { it.status == "completed" }
                 when (viewModel.currentlySelectedGroup) {
                     "pending" -> adapter.submitList(viewModel.pendingList.value)
-                    "accepted" -> adapter.submitList(viewModel.acceptedList.value)
-                    "rejected" -> adapter.submitList(viewModel.rejectedList.value)
-                    "all" -> adapter.submitList(listOfOrders)
+                    "accepted" -> {
+                        adapter.submitList(viewModel.acceptedList.value)
+                        binding.toggleButton.check(binding.tvShowAccepted.id)
+                    }
+
+                    "completed" -> adapter.submitList(viewModel.completedList.value)
+                    else -> {
+                        adapter.submitList(viewModel.acceptedList.value)
+                        binding.toggleButton.check(binding.tvShowAccepted.id)
+                    }
                 }
 
             } else {
@@ -89,26 +97,46 @@ class OrderFragment : Fragment() {
                 showErrorPopup()
         }
 
-        binding.tvShowRejected.setOnClickListener {
-            viewModel.currentlySelectedGroup = "rejected"
-            adapter.submitList(viewModel.rejectedList.value)
+        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    binding.tvShowPending.id -> {
+                        viewModel.currentlySelectedGroup = "pending"
+                        setColorAsSelected(binding.tvShowPending)
+                        setColorAsDeSelected(binding.tvShowAccepted)
+                        setColorAsDeSelected(binding.tvShowCompleted)
+                        adapter.submitList(viewModel.pendingList.value)
+                    }
+
+                    binding.tvShowAccepted.id -> {
+                        viewModel.currentlySelectedGroup = "accepted"
+                        setColorAsSelected(binding.tvShowAccepted)
+                        setColorAsDeSelected(binding.tvShowPending)
+                        setColorAsDeSelected(binding.tvShowCompleted)
+                        adapter.submitList(viewModel.acceptedList.value)
+                    }
+
+                    binding.tvShowCompleted.id -> {
+                        viewModel.currentlySelectedGroup = "completed"
+                        setColorAsSelected(binding.tvShowCompleted)
+                        setColorAsDeSelected(binding.tvShowPending)
+                        setColorAsDeSelected(binding.tvShowAccepted)
+                        adapter.submitList(viewModel.completedList.value)
+                    }
+                }
+            }
         }
 
-        binding.tvShowAccepted.setOnClickListener {
-            viewModel.currentlySelectedGroup = "accepted"
-            adapter.submitList(viewModel.acceptedList.value)
-        }
+    }
 
-        binding.tvShowPending.setOnClickListener {
-            viewModel.currentlySelectedGroup = "pending"
-            adapter.submitList(viewModel.pendingList.value)
-        }
+    private fun setColorAsSelected(button: Button) {
+        button.setBackgroundColor(resources.getColor(R.color.white, resources.newTheme()))
+        button.setTextColor(resources.getColor(R.color.black, resources.newTheme()))
+    }
 
-        binding.tvShowAll.setOnClickListener {
-            viewModel.currentlySelectedGroup = "all"
-            adapter.submitList(viewModel.ordersList.value)
-        }
-
+    private fun setColorAsDeSelected(button: Button) {
+        button.setBackgroundColor(resources.getColor(R.color.black, resources.newTheme()))
+        button.setTextColor(resources.getColor(R.color.white, resources.newTheme()))
     }
 
     fun showErrorPopup() {

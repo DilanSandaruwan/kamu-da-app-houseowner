@@ -23,6 +23,7 @@
     <string name="lbl_all">All</string>
     <string name="lbl_pending">Pending...</string>
     <string name="lbl_accepted">Accepted</string>
+    <string name="lbl_completed">Completed</string>
 
     <!-- status -->
     <string name="order_status_pending">pending</string>

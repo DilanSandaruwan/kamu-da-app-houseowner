@@ -13,7 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dilan.kamuda.houseownerapp.R
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
+import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentOrderBinding
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,11 +25,12 @@ class OrderFragment : Fragment() {
     lateinit var binding: FragmentOrderBinding
     private val viewModel: OrderViewModel by viewModels()
     private lateinit var adapter: OrderAdapter
+    private lateinit var mainActivity : MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("CHECK", "onCreate: visited")
-
+        mainActivity = requireActivity() as MainActivity
     }
 
     override fun onCreateView(
@@ -91,10 +95,20 @@ class OrderFragment : Fragment() {
         }
 
         viewModel.objectHasUpdated.observe(viewLifecycleOwner) {
-            if (it != null)
-                viewModel.getOrderDetails()
-            else
-                showErrorPopup()
+            if (it != null) viewModel.getOrderDetails()
+        }
+
+        viewModel.showLoader.observe(viewLifecycleOwner) {
+            if (it) {
+                mainActivity.binding.navView.visibility = View.GONE
+            } else {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+            }
+            mainActivity.showProgress(it)
+        }
+
+        viewModel.showErrorPopup.observe(viewLifecycleOwner) {
+            showErrorPopup(it)
         }
 
         binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
@@ -141,6 +155,17 @@ class OrderFragment : Fragment() {
 
     fun showErrorPopup() {
         Toast.makeText(context, "Response is null!", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showErrorPopup(kamuDaPopup: KamuDaPopup) {
+        val dialogFragment = ResponseHandlingDialogFragment.newInstance(
+            title = kamuDaPopup.title,
+            message = kamuDaPopup.message,
+            positiveButtonText = kamuDaPopup.positiveButtonText,
+            negativeButtonText = kamuDaPopup.negativeButtonText,
+            type = kamuDaPopup.type,
+        )
+        dialogFragment.show(childFragmentManager, "custom_dialog")
     }
 
 }

@@ -1,12 +1,13 @@
 package com.dilan.kamuda.houseownerapp.feature.order
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
 import com.dilan.kamuda.houseownerapp.feature.order.model.OrderDetail
+import com.dilan.kamuda.houseownerapp.network.utils.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class OrderViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     var currentlySelectedGroup = "accepted"
+
     // Define three MutableLists for different order statuses
     val pendingList = MutableLiveData<List<OrderDetail>>()
     val acceptedList = MutableLiveData<List<OrderDetail>>()
@@ -30,6 +32,15 @@ class OrderViewModel @Inject constructor(
     private val _objectHasUpdated = MutableLiveData<OrderDetail?>()
     val objectHasUpdated: LiveData<OrderDetail?>
         get() = _objectHasUpdated
+
+    private val _showLoader = MutableLiveData<Boolean>()
+    val showLoader: LiveData<Boolean> = _showLoader
+
+    private val _showErrorPopup = MutableLiveData<KamuDaPopup>()
+    val showErrorPopup: LiveData<KamuDaPopup> = _showErrorPopup
+
+    private val _showErrorPage = MutableLiveData<Boolean>()
+    val showErrorPage: LiveData<Boolean> = _showErrorPage
 
     fun getOrderDetails() {
         viewModelScope.launch {
@@ -52,9 +63,42 @@ class OrderViewModel @Inject constructor(
     }
 
     fun updateOrderWithStatus(orderId: Int, status: String) {
+        _showLoader.value = true
         viewModelScope.launch {
-            val response = orderRepository.updateOrderByIdWithStatusOnDataSource(orderId, status)
-            _objectHasUpdated.postValue(response)
+            when (val response =
+                orderRepository.updateOrderByIdWithStatusOnDataSource(orderId, status)) {
+                is ApiState.Success -> {
+                    _showLoader.postValue(false)
+                    val kamuDaPopup = KamuDaPopup(
+                        "Success",
+                        "Order status was updated successfully!",
+                        "",
+                        "OK",
+                        1
+                    )
+                    _objectHasUpdated.postValue(response.data)
+                    _showErrorPopup.postValue(kamuDaPopup)
+                }
+
+                is ApiState.Failure -> {
+                    _showLoader.postValue(false)
+                    val kamuDaPopup = KamuDaPopup(
+                        "Error",
+                        if (response.msg != null || response.msg != "") {
+                            response.msg
+                        } else {
+                            "Failed to update the status"
+                        },
+                        "",
+                        "Cancel",
+                        2
+                    )
+                    _objectHasUpdated.postValue(null)
+                    _showErrorPopup.postValue(kamuDaPopup)
+                }
+
+                is ApiState.Loading -> {}
+            }
         }
     }
 

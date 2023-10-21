@@ -36,16 +36,25 @@ class OrderViewModel @Inject constructor(
     private val _showLoader = MutableLiveData<Boolean>()
     val showLoader: LiveData<Boolean> = _showLoader
 
-    private val _showErrorPopup = MutableLiveData<KamuDaPopup>()
-    val showErrorPopup: LiveData<KamuDaPopup> = _showErrorPopup
+    private val _showErrorPopup = MutableLiveData<KamuDaPopup?>(null)
+    val showErrorPopup: LiveData<KamuDaPopup?> = _showErrorPopup
 
     private val _showErrorPage = MutableLiveData<Boolean>()
     val showErrorPage: LiveData<Boolean> = _showErrorPage
 
     fun getOrderDetails() {
         viewModelScope.launch {
-            val response = orderRepository.getOrdersListFromDataSource()
-            _ordersList.postValue(response)
+            when (val response = orderRepository.getOrdersListFromDataSource()) {
+                is ApiState.Success -> {
+                    _ordersList.postValue(response.data!!)
+                }
+
+                is ApiState.Failure -> {
+                    _showErrorPage.postValue(true)
+                }
+
+                is ApiState.Loading -> {}
+            }
         }
     }
 
@@ -84,11 +93,7 @@ class OrderViewModel @Inject constructor(
                     _showLoader.postValue(false)
                     val kamuDaPopup = KamuDaPopup(
                         "Error",
-                        if (response.msg != null || response.msg != "") {
-                            response.msg
-                        } else {
-                            "Failed to update the status"
-                        },
+                        "Failed to update the status",
                         "",
                         "Cancel",
                         2
@@ -100,6 +105,10 @@ class OrderViewModel @Inject constructor(
                 is ApiState.Loading -> {}
             }
         }
+    }
+
+    fun resetShowErrorPopup() {
+        _showErrorPopup.value = null
     }
 
     init {

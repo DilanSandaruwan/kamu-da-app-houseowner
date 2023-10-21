@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +16,7 @@ import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
 import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentOrderBinding
 import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +25,7 @@ class OrderFragment : Fragment() {
     lateinit var binding: FragmentOrderBinding
     private val viewModel: OrderViewModel by viewModels()
     private lateinit var adapter: OrderAdapter
-    private lateinit var mainActivity : MainActivity
+    private lateinit var mainActivity: MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +98,13 @@ class OrderFragment : Fragment() {
             if (it != null) viewModel.getOrderDetails()
         }
 
+        binding.lytCommonErrorScreenIncluded.findViewById<MaterialButton>(R.id.mbtnCommonErrorScreen)
+            .setOnClickListener {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+                viewModel.getOrderDetails()
+                binding.lytCommonErrorScreenIncluded.visibility = View.GONE
+            }
+
         viewModel.showLoader.observe(viewLifecycleOwner) {
             if (it) {
                 mainActivity.binding.navView.visibility = View.GONE
@@ -108,7 +115,15 @@ class OrderFragment : Fragment() {
         }
 
         viewModel.showErrorPopup.observe(viewLifecycleOwner) {
-            showErrorPopup(it)
+            if (it != null) {
+                showErrorPopup(it)
+            }
+        }
+
+        viewModel.showErrorPage.observe(viewLifecycleOwner) {
+            if (it) {
+                showCommonErrorScreen()
+            }
         }
 
         binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
@@ -160,8 +175,13 @@ class OrderFragment : Fragment() {
             positiveButtonText = kamuDaPopup.positiveButtonText,
             negativeButtonText = kamuDaPopup.negativeButtonText,
             type = kamuDaPopup.type,
-        )
+        ).apply { setNegativeActionListener { viewModel.resetShowErrorPopup() } }
         dialogFragment.show(childFragmentManager, "custom_dialog")
+    }
+
+    private fun showCommonErrorScreen() {
+        //mainActivity.binding.navView.visibility = View.GONE
+        binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
     }
 
 }

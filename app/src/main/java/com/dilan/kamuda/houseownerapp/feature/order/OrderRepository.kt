@@ -11,18 +11,24 @@ class OrderRepository @Inject constructor(
     private val orderApiService: OrderApiService,
 ) {
     // get all the orders as a list
-    suspend fun getOrdersListFromDataSource(): List<OrderDetail> {
+    suspend fun getOrdersListFromDataSource(): ApiState<List<OrderDetail>> {
         return withContext(Dispatchers.IO) {
             return@withContext (getOrdersListFromRemoteSource())
         }
     }
 
-    private suspend fun getOrdersListFromRemoteSource(): List<OrderDetail> {
-        val response = orderApiService.getOrdersListForAll()
-        if (response.isSuccessful) {
-            return response.body() ?: emptyList()
+    private suspend fun getOrdersListFromRemoteSource(): ApiState<List<OrderDetail>> {
+        return try {
+            val response = orderApiService.getOrdersListForAll()
+            if (response.isSuccessful) {
+                ApiState.Success(response.body() ?: emptyList())
+            } else{
+                ApiState.Failure("Something went wrong when loading this data.")
+            }
+
+        } catch (exception:Exception){
+            ApiState.Failure("Something went wrong when loading this data.")
         }
-        return emptyList()
     }
 
     /***

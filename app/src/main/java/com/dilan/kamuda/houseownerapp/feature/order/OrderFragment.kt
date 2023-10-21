@@ -153,10 +153,6 @@ class OrderFragment : Fragment() {
         button.setTextColor(resources.getColor(R.color.white, resources.newTheme()))
     }
 
-    fun showErrorPopup() {
-        Toast.makeText(context, "Response is null!", Toast.LENGTH_LONG).show()
-    }
-
     private fun showErrorPopup(kamuDaPopup: KamuDaPopup) {
         val dialogFragment = ResponseHandlingDialogFragment.newInstance(
             title = kamuDaPopup.title,

@@ -12,52 +12,62 @@ class MenuRepository @Inject constructor(
 ) {
 
     private val TAG = "MenuRepository"
-    suspend fun getMenuListForMealFromDataSource(): List<FoodMenu>? {
+    suspend fun getMenuListForMealFromDataSource(): ApiState<List<FoodMenu>?> {
         return withContext(Dispatchers.IO) {
             return@withContext getResponseFromRemoteService()
         }
     }
 
-    private suspend fun getResponseFromRemoteService(): List<FoodMenu>? {
-        val response = orderApiService.getMenuListForMeal()
-        if (response.isSuccessful) {
-            var modifiedResponseBody = mutableListOf<FoodMenu>()
-            var originalResponseBody = response.body()
+    private suspend fun getResponseFromRemoteService(): ApiState<List<FoodMenu>?> {
+        try {
+            val response = orderApiService.getMenuListForMeal()
+            if (response.isSuccessful) {
+                var modifiedResponseBody = mutableListOf<FoodMenu>()
+                var originalResponseBody = response.body()
 //            var bitmap: Bitmap? = null
-            var bitmap: ByteArray?
-            originalResponseBody?.let {
-                for (item in originalResponseBody) {
+                var bitmap: ByteArray?
+                originalResponseBody?.let {
+                    for (item in originalResponseBody) {
 
-                    bitmap = if (item.image != null) {
-                        val imageData =
-                            android.util.Base64.decode(item.image, android.util.Base64.DEFAULT)
-                        imageData
-                        //BitmapFactory.decodeByteArray(imageData,0,imageData.size)
-                    } else {
-                        null
+                        bitmap = if (item.image != null) {
+                            val imageData =
+                                android.util.Base64.decode(item.image, android.util.Base64.DEFAULT)
+                            imageData
+                            //BitmapFactory.decodeByteArray(imageData,0,imageData.size)
+                        } else {
+                            null
+                        }
+                        modifiedResponseBody.add(
+                            FoodMenu(item.id, item.name, item.price, item.status, bitmap)
+                        )
                     }
-                    modifiedResponseBody.add(
-                        FoodMenu(item.id, item.name, item.price, item.status, bitmap)
-                    )
                 }
+                return ApiState.Success(modifiedResponseBody)
+            } else {
+                return ApiState.Failure("Something went wroong when loading this screen.")
             }
-            return modifiedResponseBody
+        } catch (exception: Exception) {
+            return ApiState.Failure("Something went wroong when loading this screen.")
         }
-        return emptyList()
     }
 
-    suspend fun updateMenuListInDataSource(list: List<FoodMenu>): List<FoodMenu>? {
+    suspend fun updateMenuListInDataSource(list: List<FoodMenu>): ApiState<List<FoodMenu>?> {
         return withContext(Dispatchers.IO) {
             return@withContext updateMenuListInRemoteSource(list)
         }
     }
 
-    private suspend fun updateMenuListInRemoteSource(list: List<FoodMenu>): List<FoodMenu>? {
-        val response = orderApiService.updateMenuList(list)
-        if (response.isSuccessful) {
-            return response.body()
+    private suspend fun updateMenuListInRemoteSource(list: List<FoodMenu>): ApiState<List<FoodMenu>?> {
+        return try {
+            val response = orderApiService.updateMenuList(list)
+            if (response.isSuccessful) {
+                ApiState.Success(response.body())
+            } else {
+                ApiState.Failure("Failed to update the menu list")
+            }
+        } catch (exception: Exception) {
+            ApiState.Failure("Failed to update the menu list")
         }
-        return emptyList()
     }
 
     suspend fun saveMenuItemInDataSource(item: FoodMenu): ApiState<FoodMenu?> {
@@ -74,7 +84,7 @@ class MenuRepository @Inject constructor(
             } else {
                 ApiState.Failure("Failed to save thr menu.")
             }
-        } catch (exception : Exception){
+        } catch (exception: Exception) {
             ApiState.Failure(exception.message.toString())
         }
     }

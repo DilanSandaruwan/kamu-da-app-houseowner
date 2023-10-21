@@ -12,8 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dilan.kamuda.houseownerapp.R
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
+import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentMenuBinding
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
 import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,10 +26,11 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
     lateinit var binding: FragmentMenuBinding
     private val viewModel: MenuViewModel by viewModels()
     private lateinit var adapter: HouseMenuAdapter
+    private lateinit var mainActivity: MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mainActivity = requireActivity() as MainActivity
     }
 
     override fun onCreateView(
@@ -79,6 +84,13 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
 
         }
 
+        binding.lytCommonErrorScreenIncluded.findViewById<MaterialButton>(R.id.mbtnCommonErrorScreen)
+            .setOnClickListener {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+                viewModel.getMenuListForMeal()
+                binding.lytCommonErrorScreenIncluded.visibility = View.GONE
+            }
+
         viewModel.menuList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
@@ -99,7 +111,28 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
 
         viewModel.listChanged.observe(viewLifecycleOwner) {
             if (it) {
-                viewModel.getMenuListForMeal("breakfast")
+                viewModel.getMenuListForMeal()
+            }
+        }
+
+        viewModel.showLoader.observe(viewLifecycleOwner) {
+            if (it) {
+                mainActivity.binding.navView.visibility = View.GONE
+            } else {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+            }
+            mainActivity.showProgress(it)
+        }
+
+        viewModel.showErrorPopup.observe(viewLifecycleOwner) {
+            if(it!=null){
+                showErrorPopup(it)
+            }
+        }
+
+        viewModel.showErrorPage.observe(viewLifecycleOwner) {
+            if (it) {
+                showCommonErrorScreen()
             }
         }
     }
@@ -126,4 +159,21 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
         viewModel.updateMenuTable(mutableList)
     }
 
+    private fun showCommonErrorScreen() {
+        //mainActivity.binding.navView.visibility = View.GONE
+        binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
+    }
+
+    private fun showErrorPopup(kamuDaPopup: KamuDaPopup) {
+        val dialogFragment = ResponseHandlingDialogFragment.newInstance(
+            title = kamuDaPopup.title,
+            message = kamuDaPopup.message,
+            positiveButtonText = kamuDaPopup.positiveButtonText,
+            negativeButtonText = kamuDaPopup.negativeButtonText,
+            type = kamuDaPopup.type,
+        ).apply {
+            setNegativeActionListener { viewModel.resetErrorPopup() }
+        }
+        dialogFragment.show(childFragmentManager, "custom_dialog")
+    }
 }

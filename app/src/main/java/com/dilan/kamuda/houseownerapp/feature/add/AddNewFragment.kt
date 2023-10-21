@@ -14,8 +14,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.dilan.kamuda.houseownerapp.R
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
+import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentAddNewBinding
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
 import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 
@@ -26,6 +31,7 @@ class AddNewFragment : Fragment() {
     lateinit var binding: FragmentAddNewBinding
     private lateinit var viewModel: AddNewViewModel
     private var imageBytes: ByteArray? = null
+    private lateinit var mainActivity: MainActivity
 
     private val galleryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -64,7 +70,7 @@ class AddNewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mainActivity = requireActivity() as MainActivity
     }
 
     override fun onCreateView(
@@ -84,27 +90,73 @@ class AddNewFragment : Fragment() {
 
         binding.switchStatus.isChecked = false
         binding.btnAddNewMenu.setOnClickListener {
-            val itemName = binding.mtvNewItemName.text.toString()
-            val itemPrice = binding.mtvNewItemUnitPrice.text.toString().toDoubleOrNull() ?: 0.0
-            val itemStatus = if (binding.switchStatus.isChecked) "Y" else "N"
-
-            val body = FoodMenu(-1, itemName, itemPrice, itemStatus, imageBytes)
-            try {
-                viewModel.saveNewItem(body)
-            } catch (e: Exception) {
-                Toast.makeText(context, "Unable to save : $e", Toast.LENGTH_LONG).show()
-            }
+            setSavingMenuItem()
         }
 
         binding.btnChooseItemImg.setOnClickListener {
             openGallery()
         }
+
+        binding.lytCommonErrorScreenIncluded.findViewById<MaterialButton>(R.id.mbtnCommonErrorScreen)
+            .setOnClickListener {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+                setSavingMenuItem()
+                binding.lytCommonErrorScreenIncluded.visibility = View.GONE
+            }
+
+        viewModel.showLoader.observe(viewLifecycleOwner) {
+            if (it) {
+                mainActivity.binding.navView.visibility = View.GONE
+            } else {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+            }
+            mainActivity.showProgress(it)
+        }
+
+        viewModel.showErrorPopup.observe(viewLifecycleOwner) {
+            if(it != null){
+                showErrorPopup(it)
+            }
+        }
+
+        viewModel.showErrorPage.observe(viewLifecycleOwner) {
+            if (it) {
+                showCommonErrorScreen()
+            }
+        }
+
+    }
+
+    private fun setSavingMenuItem() {
+        val itemName = binding.mtvNewItemName.text.toString()
+        val itemPrice = binding.mtvNewItemUnitPrice.text.toString().toDoubleOrNull() ?: 0.0
+        val itemStatus = if (binding.switchStatus.isChecked) "Y" else "N"
+
+        val body = FoodMenu(-1, itemName, itemPrice, itemStatus, imageBytes)
+        viewModel.saveNewItem(body)
     }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         galleryLauncher.launch(intent)
+    }
+
+    private fun showErrorPopup(kamuDaPopup: KamuDaPopup) {
+        val dialogFragment = ResponseHandlingDialogFragment.newInstance(
+            title = kamuDaPopup.title,
+            message = kamuDaPopup.message,
+            positiveButtonText = kamuDaPopup.positiveButtonText,
+            negativeButtonText = kamuDaPopup.negativeButtonText,
+            type = kamuDaPopup.type,
+        )
+
+        dialogFragment.show(childFragmentManager, "custom_dialog")
+    }
+
+    private fun showCommonErrorScreen() {
+        mainActivity.binding.navView.visibility = View.GONE
+        binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
     }
 
 }

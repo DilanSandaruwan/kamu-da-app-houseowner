@@ -112,6 +112,6 @@ class OrderViewModel @Inject constructor(
     }
 
     init {
-        getOrderDetails()
+        //getOrderDetails()
     }
 }

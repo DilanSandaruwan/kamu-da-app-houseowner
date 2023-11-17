@@ -16,6 +16,7 @@ import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
 import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentMenuBinding
 import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity.Companion.kamuDaSecurePreference
 import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +28,13 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
     private val viewModel: MenuViewModel by viewModels()
     private lateinit var adapter: HouseMenuAdapter
     private lateinit var mainActivity: MainActivity
-
+    override fun onResume() {
+        super.onResume()
+        if (kamuDaSecurePreference.getLoadMenu(requireContext())){
+            kamuDaSecurePreference.setLoadMenu(requireContext(),false)
+            viewModel.getMenuListForMeal()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity = requireActivity() as MainActivity

@@ -7,6 +7,7 @@ class KamuDaSecurePreference {
         private const val PREF_NAME = "FoodHouseAppPreferences"
         private const val FOOD_HOUSE_ID_KEY = "food_house_id"
         private const val IS_LOGGED_HOUSE = "is_logged_house"
+        private const val LOAD_MENU_HOUSE = "load_menu_house"
     }
 
     // Method to store a food house ID in SharedPreferences
@@ -43,9 +44,22 @@ class KamuDaSecurePreference {
         return sharedPreferences.getBoolean(IS_LOGGED_HOUSE, false)
     }
 
+    fun setLoadMenu(context: Context, isLogged: Boolean) {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(LOAD_MENU_HOUSE, isLogged)
+        editor.apply()
+    }
+
+    fun getLoadMenu(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(LOAD_MENU_HOUSE, true)
+    }
+
     fun clearSharedPrefKeys(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
+        editor.remove(LOAD_MENU_HOUSE)
         editor.apply()
     }
 

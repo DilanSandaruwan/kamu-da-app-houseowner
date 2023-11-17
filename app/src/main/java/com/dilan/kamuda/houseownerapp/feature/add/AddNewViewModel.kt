@@ -20,6 +20,10 @@ constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
+    private val _menuListChanged = MutableLiveData<Boolean>(false)
+    val menuListChanged: LiveData<Boolean>
+        get() = _menuListChanged
+
     private val _showLoader = MutableLiveData<Boolean>()
     val showLoader: LiveData<Boolean> = _showLoader
 
@@ -43,6 +47,7 @@ constructor(
                         "OK",
                         1
                     )
+                    _menuListChanged.postValue(true)
                     _showErrorPopup.postValue(kamuDaPopup)
                 }
 
@@ -61,5 +66,9 @@ constructor(
                 is ApiState.Loading -> {}
             }
         }
+    }
+
+    fun resetErrorPopup() {
+        _showErrorPopup.value = null
     }
 }

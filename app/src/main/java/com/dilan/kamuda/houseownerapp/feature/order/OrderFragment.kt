@@ -27,6 +27,14 @@ class OrderFragment : Fragment() {
     private lateinit var adapter: OrderAdapter
     private lateinit var mainActivity: MainActivity
 
+    override fun onResume() {
+        super.onResume()
+        context?.let { MainActivity.kamuDaSecurePreference.getCustomerID(it).toInt() }
+            ?.let {
+                viewModel.getOrderDetails()
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("CHECK", "onCreate: visited")

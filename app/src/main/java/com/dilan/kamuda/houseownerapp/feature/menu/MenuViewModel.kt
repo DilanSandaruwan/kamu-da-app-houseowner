@@ -128,6 +128,6 @@ constructor(
     }
 
     init {
-        getMenuListForMeal()
+        //getMenuListForMeal()
     }
 }

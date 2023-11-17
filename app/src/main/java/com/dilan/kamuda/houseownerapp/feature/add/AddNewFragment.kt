@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,6 +18,7 @@ import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
 import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentAddNewBinding
 import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity.Companion.kamuDaSecurePreference
 import com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,6 +104,12 @@ class AddNewFragment : Fragment() {
                 binding.lytCommonErrorScreenIncluded.visibility = View.GONE
             }
 
+        viewModel.menuListChanged.observe(viewLifecycleOwner) {
+            if (it) {
+                kamuDaSecurePreference.setLoadMenu(requireContext(), true)
+            }
+        }
+
         viewModel.showLoader.observe(viewLifecycleOwner) {
             if (it) {
                 mainActivity.binding.navView.visibility = View.GONE
@@ -114,7 +120,7 @@ class AddNewFragment : Fragment() {
         }
 
         viewModel.showErrorPopup.observe(viewLifecycleOwner) {
-            if(it != null){
+            if (it != null) {
                 showErrorPopup(it)
             }
         }
@@ -149,13 +155,13 @@ class AddNewFragment : Fragment() {
             positiveButtonText = kamuDaPopup.positiveButtonText,
             negativeButtonText = kamuDaPopup.negativeButtonText,
             type = kamuDaPopup.type,
-        )
+        ).apply { setNegativeActionListener { viewModel.resetErrorPopup() } }
 
         dialogFragment.show(childFragmentManager, "custom_dialog")
     }
 
     private fun showCommonErrorScreen() {
-        mainActivity.binding.navView.visibility = View.GONE
+        //mainActivity.binding.navView.visibility = View.GONE
         binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
     }
 

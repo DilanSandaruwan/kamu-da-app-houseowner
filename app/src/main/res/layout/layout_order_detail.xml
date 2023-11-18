@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/lytMatCardOrderDetail"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -206,7 +207,50 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/lytContactCustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <!-- Call Icon -->
+            <ImageView
+                android:id="@+id/imageCall"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_round_phone_48dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvCustName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="20dp"
+                    tool:text="Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvCustMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mtvCustName"
+                    android:layout_weight="2"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="20dp"
+                    tool:text="Contact Number"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

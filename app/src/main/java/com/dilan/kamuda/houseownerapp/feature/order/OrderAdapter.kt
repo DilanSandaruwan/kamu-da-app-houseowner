@@ -6,6 +6,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -32,8 +33,11 @@ class OrderAdapter(
         val orderItemCount: MaterialTextView = view.findViewById(R.id.mtvOrderedItemCount)
         val orderTotal: MaterialTextView = view.findViewById(R.id.mtvOrderTotal)
         val orderStatus: MaterialTextView = view.findViewById(R.id.tvOrderStatus)
+        val custName: MaterialTextView = view.findViewById(R.id.mtvCustName)
+        val custContactNumber: MaterialTextView = view.findViewById(R.id.mtvCustMobile)
         val rvOrderItems: RecyclerView = view.findViewById(R.id.rvViewOrderItems)
         val lytBtnToggle: RelativeLayout = view.findViewById(R.id.lytBtnToggle)
+        val lytContactCustomer: LinearLayout = view.findViewById(R.id.lytContactCustomer)
         var lytMatCardOrderDetail: MaterialCardView = view.findViewById(R.id.lytMatCardOrderDetail)
         var lytMatCardOrderDivider: MaterialDivider = view.findViewById(R.id.verticalDivider)
         val btnArrowUp: ImageView = view.findViewById(R.id.btnArrowUp)
@@ -142,6 +146,8 @@ class OrderAdapter(
         holder.orderItemCount.text = "${item.items.sumOf { it.quantity }} Items"
         holder.orderTotal.text = item.total.toString()
         holder.orderStatus.text = item.status
+        holder.custName.text = "${item.firstName} ${item.lastName}"
+        holder.custContactNumber.text = item.contactNumber
         // Set up child RecyclerView
         val childAdapter = ViewOrderedItemsAdapter()
         holder.rvOrderItems.layoutManager =
@@ -160,10 +166,12 @@ class OrderAdapter(
                 holder.btnArrowDown.visibility = GONE
                 holder.btnArrowUp.visibility = VISIBLE
                 holder.rvOrderItems.visibility = VISIBLE
+                holder.lytContactCustomer.visibility = VISIBLE
             } else {
                 holder.btnArrowUp.visibility = GONE
                 holder.btnArrowDown.visibility = VISIBLE
                 holder.rvOrderItems.visibility = GONE
+                holder.lytContactCustomer.visibility = GONE
             }
         }
 

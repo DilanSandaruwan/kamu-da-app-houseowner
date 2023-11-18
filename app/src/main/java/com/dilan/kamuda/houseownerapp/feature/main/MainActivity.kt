@@ -1,8 +1,6 @@
 package com.dilan.kamuda.houseownerapp.feature.main
 
 import android.os.Bundle
-import android.view.View
-import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration

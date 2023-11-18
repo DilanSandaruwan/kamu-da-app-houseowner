@@ -1,5 +1,9 @@
 package com.dilan.kamuda.houseownerapp.feature.home
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +12,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -35,6 +41,8 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: HomeAdapter
     private var latestOrderDetail: OrderDetail? = null
     private lateinit var mainActivity: MainActivity
+
+    private val REQUEST_CALL_PERMISSION = 1
 
     override fun onResume() {
         super.onResume()
@@ -140,11 +148,10 @@ class HomeFragment : Fragment() {
                 SimpleDateFormat("yyyy-MM-dd").parse(
                     latestOrderDetail!!.date
                 )
-            )
-                .also {
-                    binding.lytLatestOrder.findViewById<MaterialTextView>(R.id.mtvOrderDate).text =
-                        it
-                }
+            ).also {
+                binding.lytLatestOrder.findViewById<MaterialTextView>(R.id.mtvOrderDate).text =
+                    it
+            }
             binding.lytLatestOrder.findViewById<MaterialTextView>(R.id.mtvOrderTime).text =
                 latestOrderDetail!!.createdAt
             binding.lytLatestOrder.findViewById<MaterialTextView>(R.id.mtvOrderTotal).text =
@@ -153,7 +160,13 @@ class HomeFragment : Fragment() {
                 "${latestOrderDetail!!.items.size} Items"
             binding.lytLatestOrder.findViewById<TextView>(R.id.tvOrderStatus).text =
                 "${latestOrderDetail!!.status.uppercase()}"
-
+            binding.lytLatestOrder.findViewById<MaterialTextView>(R.id.mtvCustName).text =
+                "${latestOrderDetail!!.firstName} ${latestOrderDetail!!.lastName}"
+            binding.lytLatestOrder.findViewById<MaterialTextView>(R.id.mtvCustMobile).text =
+                latestOrderDetail!!.contactNumber
+            binding.lytLatestOrder.findViewById<ImageView>(R.id.imageCall).setOnClickListener {
+                makePhoneCall(latestOrderDetail!!.contactNumber)
+            }
             when (latestOrderDetail!!.status) {
                 "pending" -> {
                     binding.lytLatestOrder.findViewById<MaterialDivider>(R.id.verticalDivider).dividerColor =
@@ -223,12 +236,16 @@ class HomeFragment : Fragment() {
                             View.VISIBLE
                         binding.lytLatestOrder.findViewById<RecyclerView>(R.id.rvViewOrderItems).visibility =
                             View.VISIBLE
+                        binding.lytLatestOrder.findViewById<LinearLayout>(R.id.lytContactCustomer).visibility =
+                            View.VISIBLE
                     } else {
                         binding.lytLatestOrder.findViewById<ImageView>(R.id.btnArrowUp).visibility =
                             View.GONE
                         binding.lytLatestOrder.findViewById<ImageView>(R.id.btnArrowDown).visibility =
                             View.VISIBLE
                         binding.lytLatestOrder.findViewById<RecyclerView>(R.id.rvViewOrderItems).visibility =
+                            View.GONE
+                        binding.lytLatestOrder.findViewById<LinearLayout>(R.id.lytContactCustomer).visibility =
                             View.GONE
                     }
                 }
@@ -239,6 +256,64 @@ class HomeFragment : Fragment() {
     private fun showCommonErrorScreen() {
         mainActivity.binding.navView.visibility = View.GONE
         binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
+    }
+
+    /***
+     * Make a phone call
+     */
+    private fun makePhoneCall(phoneNumber: String) {
+
+        // Check for CALL_PHONE permission
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request the permission
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.CALL_PHONE),
+                REQUEST_CALL_PERMISSION
+            )
+        } else {
+            // Permission is granted, make the phone call
+            initiatePhoneCall(phoneNumber)
+        }
+    }
+
+    private fun initiatePhoneCall(phoneNumber: String) {
+        val callIntent = Intent(Intent.ACTION_CALL)
+        callIntent.data = Uri.parse("tel:$phoneNumber")
+
+        try {
+            startActivity(callIntent)
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CALL_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, make the phone call
+                Toast.makeText(
+                    requireContext(),
+                    "Permission granted. Now you can make the call.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                // Permission denied, notify the user
+                Toast.makeText(
+                    requireContext(),
+                    "Permission denied. Can't make a call.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
 }

@@ -19,7 +19,11 @@
         android:id="@+id/menuFragment"
         android:name="com.dilan.kamuda.houseownerapp.feature.menu.MenuFragment"
         android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" />
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_editMealMenuFragment"
+            app:destination="@id/editMealMenuFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.dilan.kamuda.houseownerapp.feature.home.HomeFragment"
@@ -29,4 +33,15 @@
         android:id="@+id/addNewFragment"
         android:name="com.dilan.kamuda.houseownerapp.feature.add.AddNewFragment"
         android:label="AddNewFragment" />
+    <fragment
+        android:id="@+id/editMealMenuFragment"
+        android:name="com.dilan.kamuda.houseownerapp.feature.edit.EditMealMenuFragment"
+        android:label="EditMealMenuFragment" >
+        <argument
+            android:name="foodMenuItem"
+            app:argType="com.dilan.kamuda.houseownerapp.feature.menu.model.FoodMenu" />
+        <action
+            android:id="@+id/action_editMealMenuFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
 </navigation>

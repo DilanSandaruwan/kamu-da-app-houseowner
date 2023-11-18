@@ -88,4 +88,23 @@ class MenuRepository @Inject constructor(
             ApiState.Failure(exception.message.toString())
         }
     }
+
+    suspend fun saveEditMenuItemInDataSource(item: FoodMenu): ApiState<FoodMenu?> {
+        return withContext(Dispatchers.IO) {
+            return@withContext saveEditMenuItemInRemoteSource(item)
+        }
+    }
+
+    private suspend fun saveEditMenuItemInRemoteSource(item: FoodMenu): ApiState<FoodMenu?> {
+        return try {
+            val response = orderApiService.updateEditMenuItem(item.id, item)
+            if (response.isSuccessful) {
+                ApiState.Success(response.body())
+            } else {
+                ApiState.Failure("Failed to save the updated menu.")
+            }
+        } catch (exception: Exception) {
+            ApiState.Failure(exception.message.toString())
+        }
+    }
 }

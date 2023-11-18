@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dilan.kamuda.houseownerapp.R
@@ -30,11 +31,11 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
     private lateinit var mainActivity: MainActivity
     override fun onResume() {
         super.onResume()
-        if (kamuDaSecurePreference.getLoadMenu(requireContext())){
-            kamuDaSecurePreference.setLoadMenu(requireContext(),false)
+        if (kamuDaSecurePreference.getLoadMenu(requireContext())) {
             viewModel.getMenuListForMeal()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity = requireActivity() as MainActivity
@@ -61,7 +62,7 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
             HouseMenuAdapter.OnItemClickListener {
 
             override fun itemClick(item: FoodMenu) {
-
+                goToEditMealMenuItem(item)
             }
         }, this)
 
@@ -132,7 +133,7 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
         }
 
         viewModel.showErrorPopup.observe(viewLifecycleOwner) {
-            if(it!=null){
+            if (it != null) {
                 showErrorPopup(it)
             }
         }
@@ -156,6 +157,14 @@ class MenuFragment : Fragment(), HouseMenuAdapter.CheckedItemListener {
             updatedCheckedItems.remove(item)
         }
         viewModel.setCheckedItemsList(updatedCheckedItems)
+    }
+
+    fun goToEditMealMenuItem(foodMenuItem: FoodMenu) {
+        val action = MenuFragmentDirections.actionMenuFragmentToEditMealMenuFragment(
+            foodMenuItem
+        )
+        view?.findNavController()?.navigate(action)
+
     }
 
     private fun setUpdatedMenuDetails(changedItems: List<FoodMenu>) {

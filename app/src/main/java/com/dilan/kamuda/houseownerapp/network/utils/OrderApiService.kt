@@ -35,4 +35,11 @@ interface OrderApiService {
 
     @POST(NetworkConstant.ENDPOINT_MENU_SAVE)
     suspend fun saveMenuItem(@Body item: FoodMenu): Response<FoodMenu>
+
+    @PUT(NetworkConstant.ENDPOINT_MENU_ITEM_UPDATE)
+    suspend fun updateEditMenuItem(
+        @Path("id") orderId: Int,
+        @Body foodMenuItem: FoodMenu
+    ): Response<FoodMenu?>
+
 }

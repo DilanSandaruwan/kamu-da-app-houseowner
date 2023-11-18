@@ -32,4 +32,5 @@
     <string name="order_status_completed">completed</string>
     <string name="order_status_cancelled">cancelled</string>
     <string name="something_went_wrong">Something went wrong when loading this screen</string>
+    <string name="title_menu_edit">Edit Menu</string>
 </resources>

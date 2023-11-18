@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -41,6 +42,7 @@ class HouseMenuAdapter(
         val btnDecrement: ImageButton = view.findViewById(R.id.btnDecrement)
         val ivRoundedImageView: RoundedImageView = view.findViewById(R.id.ivRoundMenuItem)
         val tvItemCount: TextView = view.findViewById(R.id.tvItemCount)
+        val ivEditMenuItem: ImageView = view.findViewById(R.id.ivEditMenuItem)
     }
 
     companion object {
@@ -99,6 +101,10 @@ class HouseMenuAdapter(
             if (!isChecked) {
                 holder.tvItemCount.text = item.price.toString()
             }
+        }
+
+        holder.ivEditMenuItem.setOnClickListener {
+            itemClickListener.itemClick(item)
         }
 
         if (item in checkedItems) {

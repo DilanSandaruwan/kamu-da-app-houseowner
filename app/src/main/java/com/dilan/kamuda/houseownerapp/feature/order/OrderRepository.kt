@@ -1,6 +1,7 @@
 package com.dilan.kamuda.houseownerapp.feature.order
 
 import com.dilan.kamuda.houseownerapp.feature.order.model.OrderDetail
+import com.dilan.kamuda.houseownerapp.network.utils.ApiState
 import com.dilan.kamuda.houseownerapp.network.utils.OrderApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,18 +11,24 @@ class OrderRepository @Inject constructor(
     private val orderApiService: OrderApiService,
 ) {
     // get all the orders as a list
-    suspend fun getOrdersListFromDataSource(): List<OrderDetail> {
+    suspend fun getOrdersListFromDataSource(): ApiState<List<OrderDetail>> {
         return withContext(Dispatchers.IO) {
             return@withContext (getOrdersListFromRemoteSource())
         }
     }
 
-    private suspend fun getOrdersListFromRemoteSource(): List<OrderDetail> {
-        val response = orderApiService.getOrdersListForMeal()
-        if (response.isSuccessful) {
-            return response.body() ?: emptyList()
+    private suspend fun getOrdersListFromRemoteSource(): ApiState<List<OrderDetail>> {
+        return try {
+            val response = orderApiService.getOrdersListForAll()
+            if (response.isSuccessful) {
+                ApiState.Success(response.body() ?: emptyList())
+            } else{
+                ApiState.Failure("Something went wrong when loading this data.")
+            }
+
+        } catch (exception:Exception){
+            ApiState.Failure("Something went wrong when loading this data.")
         }
-        return emptyList()
     }
 
     /***
@@ -34,7 +41,7 @@ class OrderRepository @Inject constructor(
     }
 
     private suspend fun getOrdersListByStatusFromRemoteSource(status: String): List<OrderDetail> {
-        val response = orderApiService.getOrdersListByStateForMeal(status)
+        val response = orderApiService.getOrdersListByStatus(status)
         if (response.isSuccessful) {
             return response.body() ?: emptyList()
         }
@@ -61,7 +68,10 @@ class OrderRepository @Inject constructor(
     /***
      * UPDATE the order status
      */
-    suspend fun updateOrderByIdWithStatusOnDataSource(orderId: Int, status: String): OrderDetail? {
+    suspend fun updateOrderByIdWithStatusOnDataSource(
+        orderId: Int,
+        status: String
+    ): ApiState<OrderDetail?> {
         return withContext(Dispatchers.IO) {
             return@withContext (updateOrderByIdWithStatusOnRemoteSource(orderId, status))
         }
@@ -70,12 +80,17 @@ class OrderRepository @Inject constructor(
     private suspend fun updateOrderByIdWithStatusOnRemoteSource(
         orderId: Int,
         status: String
-    ): OrderDetail? {
-        val response = orderApiService.updateOrderByIdWithStatus(orderId, status)
-        if (response.isSuccessful) {
-            return response.body()
+    ): ApiState<OrderDetail?> {
+        return try {
+            val response = orderApiService.updateOrderByIdWithStatus(orderId, status)
+            if (response.isSuccessful) {
+                ApiState.Success(response.body())
+            } else {
+                ApiState.Failure("Failed to update the status")
+            }
+        } catch (exception: Exception) {
+            ApiState.Failure(exception.message.toString())
         }
-        return null
     }
 
 }

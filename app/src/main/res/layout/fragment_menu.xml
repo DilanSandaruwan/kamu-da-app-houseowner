@@ -12,6 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black"
         tools:context=".feature.add.AddNewFragment">
 
         <LinearLayout
@@ -37,7 +38,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/title_menu"
+                android:text="@string/title_today_menu"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -49,82 +50,61 @@
                 android:background="@color/transparent" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/header2"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/header"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@color/white">
+            android:background="@drawable/bg_top_curved_white">
 
-            <TextView
-                android:id="@+id/tvMeal"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFoodMenu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/meal_name"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnUpdateMenu"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp" />
 
-            <TextView
-                android:id="@+id/tvMealDate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/date_for_order"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUpdateMenu"
+                android:layout_width="220dp"
+                android:layout_height="48dp"
+                android:layout_alignBaseline="@+id/btnAddNew"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:enabled="false"
+                android:text="@string/update"
+                android:textAlignment="center"
+                android:textSize="18sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFoodMenu"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddNew"
+                android:layout_width="220dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toStartOf="@+id/btnUpdateMenu"
+                android:enabled="true"
+                android:gravity="center"
+                android:text="@string/title_my_add"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/lytCommonErrorScreenIncluded"
+            layout="@layout/layout_common_error"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/btnUpdateMenu"
-            android:layout_below="@+id/header2"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnUpdateMenu"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_alignBaseline="@+id/btnAddNew"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:enabled="false"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:text="@string/update" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddNew"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/btnUpdateMenu"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:enabled="true"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:text="@string/title_my_add"
-            android:visibility="invisible"/>
-
+            android:layout_height="match_parent"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </layout>

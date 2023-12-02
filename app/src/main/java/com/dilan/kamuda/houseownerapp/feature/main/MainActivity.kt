@@ -1,22 +1,30 @@
 package com.dilan.kamuda.houseownerapp.feature.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.dilan.kamuda.houseownerapp.ActBase
 import com.dilan.kamuda.houseownerapp.R
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaSecurePreference
 import com.dilan.kamuda.houseownerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ActBase() {
     lateinit var binding: ActivityMainBinding
+
+    companion object {
+        var kamuDaSecurePreference = KamuDaSecurePreference()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        kamuDaSecurePreference.clearSharedPrefKeys(this)
 
         val navView: BottomNavigationView = binding.navView
 

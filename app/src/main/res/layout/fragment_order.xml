@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -12,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black"
         tools:context=".views.fragments.order.ViewOrderFragment">
 
         <LinearLayout
@@ -28,7 +30,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:background="@color/transparent"
-                android:src="@drawable/ic_round_arrow_back_24dp" />
+                android:src="@drawable/ic_round_arrow_back_24dp"
+                android:visibility="invisible" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,181 +51,244 @@
                 android:background="@color/transparent" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/header2"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/header"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@color/white">
+            android:layout_marginBottom="5dp"
+            android:background="@color/black">
 
-            <TextView
-                android:id="@+id/tvShowPending"
+            <!--            ***************************************-->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="@color/teal_200"
-                android:gravity="center"
-                android:text="@string/lbl_pending"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                app:singleSelection="true">
 
-            <TextView
-                android:id="@+id/tvShowAccepted"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="@color/green"
-                android:gravity="center"
-                android:text="@string/lbl_accepted"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/tvShowPending"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_pending"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/tvShowRejected"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="@color/red"
-                android:gravity="center"
-                android:text="@string/lbl_rejected"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/tvShowAccepted"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_accepted"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/tvShowAll"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="@color/teal_200"
-                android:gravity="center"
-                android:text="@string/lbl_all"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/tvShowCompleted"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_completed"
+                    android:textColor="@color/white" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+            <!--            ***************************************-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvShowPending"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_margin="3dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:background="@color/yellow"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="@string/lbl_pending"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="16sp"-->
+            <!--                android:textStyle="bold" />-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvViewOrderDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header2"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="50dp"
-            android:text="No orders"
-            android:visibility="gone" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvShowAccepted"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_margin="3dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:background="@color/green"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="@string/lbl_accepted"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="16sp"-->
+            <!--                android:textStyle="bold" />-->
 
-        <TextView
-            android:id="@+id/tvNoOrdersYet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header2"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="50dp"
-            android:gravity="center"
-            android:text="No orders yet."
-            android:textSize="20sp"
-            android:visibility="visible" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvShowRejected"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_margin="3dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:background="@color/redish"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="@string/lbl_rejected"-->
+            <!--                android:textColor="@color/white"-->
+            <!--                android:textSize="16sp"-->
+            <!--                android:textStyle="bold" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvShowAll"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_margin="3dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:background="@color/teal_200"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="@string/lbl_all"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="16sp"-->
+            <!--                android:textStyle="bold" />-->
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/semi_transparent"
-            android:gravity="center"
-            android:visibility="gone">
+            android:layout_below="@+id/header2"
+            android:background="@drawable/bg_top_curved_white">
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvViewOrderDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
-                android:background="@color/white">
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="No orders"
+                android:visibility="gone" />
 
-                <LinearLayout
+            <TextView
+                android:id="@+id/tvNoOrdersYet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                android:text="No orders yet."
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvOrdersLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                android:text="Loading..."
+                android:textSize="20sp"
+                android:visibility="visible" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/semi_transparent"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <androidx.constraintlayout.utils.widget.ImageFilterButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_round_close_24dp" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvViewOrderedItemDetailsPopup"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:visibility="visible" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnOrderReject"
+                        <androidx.constraintlayout.utils.widget.ImageFilterButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:src="@drawable/ic_round_close_24dp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvViewOrderedItemDetailsPopup"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/black"
-                            android:text="Reject"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="10dp"
                             android:visibility="visible" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnOrderAccept"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/teal_700"
-                            android:text="Accept"
-                            android:textColor="@color/black"
-                            android:visibility="visible" />
+                            android:orientation="horizontal">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnOrderReady"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/yellow"
-                            android:text="Ready"
-                            android:textColor="@color/black"
-                            android:visibility="gone" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnOrderReject"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/black"
+                                android:text="Reject"
+                                android:visibility="visible" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnOrderAccept"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/teal_700"
+                                android:text="Accept"
+                                android:textColor="@color/black"
+                                android:visibility="visible" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnOrderReady"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/yellow"
+                                android:text="Ready"
+                                android:textColor="@color/black"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+
                     </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
 
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
 
+        <include
+            android:id="@+id/lytCommonErrorScreenIncluded"
+            layout="@layout/layout_common_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
     </RelativeLayout>
 </layout>

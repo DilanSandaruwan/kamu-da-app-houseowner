@@ -16,10 +16,10 @@ interface OrderApiService {
     suspend fun getMenuListForMeal(): Response<List<FoodMenuGetType>>
 
     @GET(NetworkConstant.ENDPOINT_GET_ORDERS_ALL)
-    suspend fun getOrdersListForMeal(): Response<List<OrderDetail>>
+    suspend fun getOrdersListForAll(): Response<List<OrderDetail>>
 
     @GET(NetworkConstant.ENDPOINT_GET_ORDERS_BY_STATE)
-    suspend fun getOrdersListByStateForMeal(@Path("status") status: String): Response<List<OrderDetail>>
+    suspend fun getOrdersListByStatus(@Path("status") status: String): Response<List<OrderDetail>>
 
     @GET(NetworkConstant.ENDPOINT_GET_ORDER_BY_ID)
     suspend fun getOrderById(@Path("orderId") orderId: Int): Response<OrderDetail>
@@ -35,4 +35,11 @@ interface OrderApiService {
 
     @POST(NetworkConstant.ENDPOINT_MENU_SAVE)
     suspend fun saveMenuItem(@Body item: FoodMenu): Response<FoodMenu>
+
+    @PUT(NetworkConstant.ENDPOINT_MENU_ITEM_UPDATE)
+    suspend fun updateEditMenuItem(
+        @Path("id") orderId: Int,
+        @Body foodMenuItem: FoodMenu
+    ): Response<FoodMenu?>
+
 }

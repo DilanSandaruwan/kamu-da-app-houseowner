@@ -1,160 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/lytMatCardOrderDetail"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="@color/orange">
+    android:elevation="6dp"
+    app:cardBackgroundColor="@color/transparent">
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/verticalDivider"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:dividerColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/lblOrderId"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="end|center_vertical"
-                android:paddingStart="10dp"
-                android:text="Order Id"
-                android:textSize="16sp"
-                android:textStyle="bold|italic" />
+            <LinearLayout
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_gravity="center"
+                android:elevation="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/lblOrderTotal"
+                <com.dilan.kamuda.houseownerapp.common.util.component.RoundedImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="15dp"
+                    android:background="@color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_all_spices" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="end|center_vertical"
-                android:paddingStart="10dp"
-                android:text="Total"
-                android:textSize="14sp"
-                android:textStyle="bold|italic" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvOrderId"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="Order Id"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvOrderDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="Order Id"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvOrderTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="Order Total"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvOrderedItemCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="Order Total"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/mtvOrderTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="end|center_vertical"
+                        android:text="Order Time"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:id="@+id/lytBtnToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="20dp">
+
+                        <ImageView
+                            android:id="@+id/btnArrowDown"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_arrow_down_24dp"
+                            android:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/btnArrowUp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_arrow_up_24dp"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvOrderStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:text="Pending"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lytBtnActions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:orientation="vertical">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvOrderId"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="start|center_vertical"
-                android:paddingStart="10dp"
-                android:text="Order Id"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvOrderTotal"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="start|center_vertical"
-                android:paddingStart="10dp"
-                android:text="Order Total"
-                android:textSize="14sp"
-                android:textStyle="normal" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvOrderStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
-            android:gravity="center"
-            android:text="Pending"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-        <RelativeLayout
-            android:id="@+id/lytBtnToggle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="20dp">
-
-            <ImageView
-                android:id="@+id/btnArrowDown"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_arrow_down_24dp"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOrderReject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:text="Reject"
                 android:visibility="visible" />
 
-            <ImageView
-                android:id="@+id/btnArrowUp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_arrow_up_24dp"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOrderAccept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/ude_green"
+                android:text="Accept"
+                android:textColor="@color/white"
+                android:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOrderReady"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/orange"
+                android:text="Ready?"
+                android:textColor="@color/black"
                 android:visibility="gone" />
-        </RelativeLayout>
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOrderReject"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvViewOrderItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/black"
-            android:text="Reject"
-            android:visibility="visible" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOrderAccept"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/teal_700"
-            android:text="Accept"
-            android:textColor="@color/black"
-            android:visibility="visible" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOrderReady"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/orange"
-            android:text="Ready?"
-            android:textColor="@color/black"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/lytContactCustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <!-- Call Icon -->
+            <ImageView
+                android:id="@+id/imageCall"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_round_phone_48dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvCustName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="20dp"
+                    tool:text="Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mtvCustMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mtvCustName"
+                    android:layout_weight="2"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="20dp"
+                    tool:text="Contact Number"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+        </LinearLayout>
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvViewOrderItems"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone" />
-
 
 </com.google.android.material.card.MaterialCardView>

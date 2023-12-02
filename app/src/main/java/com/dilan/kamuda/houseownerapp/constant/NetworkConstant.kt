@@ -1,14 +1,17 @@
 package com.dilan.kamuda.houseownerapp.constant
 
-import com.dilan.kamuda.houseownerapp.common.model.mysecret.dongo_url
+import com.dilan.kamuda.houseownerapp.common.model.mysecret.udevictory_url
 
 object NetworkConstant {
     //const val BASE_URL = mockapi_url
-    const val BASE_URL = dongo_url
+    //const val BASE_URL = dongo_url
     //const val BASE_URL = route_url
+    //const val BASE_URL = udesanvictory_url
+    const val BASE_URL = udevictory_url
 
     const val ENDPOINT_MENU = "menu/all"
     const val ENDPOINT_MENU_UPDATE = "menu/update"
+    const val ENDPOINT_MENU_ITEM_UPDATE = "menu/update/{id}"
     const val ENDPOINT_MENU_SAVE = "menu/save"
 
     const val ENDPOINT_GET_ORDERS_ALL = "order/house/all"

@@ -5,14 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dilan.kamuda.houseownerapp.R
+import com.dilan.kamuda.houseownerapp.common.util.KamuDaPopup
+import com.dilan.kamuda.houseownerapp.common.util.component.ResponseHandlingDialogFragment
 import com.dilan.kamuda.houseownerapp.databinding.FragmentOrderBinding
+import com.dilan.kamuda.houseownerapp.feature.main.MainActivity
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,11 +25,20 @@ class OrderFragment : Fragment() {
     lateinit var binding: FragmentOrderBinding
     private val viewModel: OrderViewModel by viewModels()
     private lateinit var adapter: OrderAdapter
+    private lateinit var mainActivity: MainActivity
+
+    override fun onResume() {
+        super.onResume()
+        context?.let { MainActivity.kamuDaSecurePreference.getCustomerID(it).toInt() }
+            ?.let {
+                viewModel.getOrderDetails()
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("CHECK", "onCreate: visited")
-
+        mainActivity = requireActivity() as MainActivity
     }
 
     override fun onCreateView(
@@ -63,16 +76,24 @@ class OrderFragment : Fragment() {
 
         viewModel.ordersList.observe(viewLifecycleOwner) { listOfOrders ->
             if (listOfOrders.isNotEmpty()) {
+                binding.tvOrdersLoading.visibility = View.GONE
                 binding.tvNoOrdersYet.visibility = View.GONE
                 binding.rvViewOrderDetails.visibility = View.VISIBLE
                 viewModel.pendingList.value = listOfOrders.filter { it.status == "pending" }
                 viewModel.acceptedList.value = listOfOrders.filter { it.status == "accepted" }
-                viewModel.rejectedList.value = listOfOrders.filter { it.status == "rejected" }
+                viewModel.completedList.value = listOfOrders.filter { it.status == "completed" }
                 when (viewModel.currentlySelectedGroup) {
                     "pending" -> adapter.submitList(viewModel.pendingList.value)
-                    "accepted" -> adapter.submitList(viewModel.acceptedList.value)
-                    "rejected" -> adapter.submitList(viewModel.rejectedList.value)
-                    "all" -> adapter.submitList(listOfOrders)
+                    "accepted" -> {
+                        adapter.submitList(viewModel.acceptedList.value)
+                        binding.toggleButton.check(binding.tvShowAccepted.id)
+                    }
+
+                    "completed" -> adapter.submitList(viewModel.completedList.value)
+                    else -> {
+                        adapter.submitList(viewModel.acceptedList.value)
+                        binding.toggleButton.check(binding.tvShowAccepted.id)
+                    }
                 }
 
             } else {
@@ -82,36 +103,93 @@ class OrderFragment : Fragment() {
         }
 
         viewModel.objectHasUpdated.observe(viewLifecycleOwner) {
-            if (it != null)
+            if (it != null) viewModel.getOrderDetails()
+        }
+
+        binding.lytCommonErrorScreenIncluded.findViewById<MaterialButton>(R.id.mbtnCommonErrorScreen)
+            .setOnClickListener {
+                mainActivity.binding.navView.visibility = View.VISIBLE
                 viewModel.getOrderDetails()
-            else
-                showErrorPopup()
+                binding.lytCommonErrorScreenIncluded.visibility = View.GONE
+            }
+
+        viewModel.showLoader.observe(viewLifecycleOwner) {
+            if (it) {
+                mainActivity.binding.navView.visibility = View.GONE
+            } else {
+                mainActivity.binding.navView.visibility = View.VISIBLE
+            }
+            mainActivity.showProgress(it)
         }
 
-        binding.tvShowRejected.setOnClickListener {
-            viewModel.currentlySelectedGroup = "rejected"
-            adapter.submitList(viewModel.rejectedList.value)
+        viewModel.showErrorPopup.observe(viewLifecycleOwner) {
+            if (it != null) {
+                showErrorPopup(it)
+            }
         }
 
-        binding.tvShowAccepted.setOnClickListener {
-            viewModel.currentlySelectedGroup = "accepted"
-            adapter.submitList(viewModel.acceptedList.value)
+        viewModel.showErrorPage.observe(viewLifecycleOwner) {
+            if (it) {
+                showCommonErrorScreen()
+            }
         }
 
-        binding.tvShowPending.setOnClickListener {
-            viewModel.currentlySelectedGroup = "pending"
-            adapter.submitList(viewModel.pendingList.value)
-        }
+        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    binding.tvShowPending.id -> {
+                        viewModel.currentlySelectedGroup = "pending"
+                        setColorAsSelected(binding.tvShowPending)
+                        setColorAsDeSelected(binding.tvShowAccepted)
+                        setColorAsDeSelected(binding.tvShowCompleted)
+                        adapter.submitList(viewModel.pendingList.value)
+                    }
 
-        binding.tvShowAll.setOnClickListener {
-            viewModel.currentlySelectedGroup = "all"
-            adapter.submitList(viewModel.ordersList.value)
+                    binding.tvShowAccepted.id -> {
+                        viewModel.currentlySelectedGroup = "accepted"
+                        setColorAsSelected(binding.tvShowAccepted)
+                        setColorAsDeSelected(binding.tvShowPending)
+                        setColorAsDeSelected(binding.tvShowCompleted)
+                        adapter.submitList(viewModel.acceptedList.value)
+                    }
+
+                    binding.tvShowCompleted.id -> {
+                        viewModel.currentlySelectedGroup = "completed"
+                        setColorAsSelected(binding.tvShowCompleted)
+                        setColorAsDeSelected(binding.tvShowPending)
+                        setColorAsDeSelected(binding.tvShowAccepted)
+                        adapter.submitList(viewModel.completedList.value)
+                    }
+                }
+            }
         }
 
     }
 
-    fun showErrorPopup() {
-        Toast.makeText(context, "Response is null!", Toast.LENGTH_LONG).show()
+    private fun setColorAsSelected(button: Button) {
+        button.setBackgroundColor(resources.getColor(R.color.white, resources.newTheme()))
+        button.setTextColor(resources.getColor(R.color.black, resources.newTheme()))
+    }
+
+    private fun setColorAsDeSelected(button: Button) {
+        button.setBackgroundColor(resources.getColor(R.color.black, resources.newTheme()))
+        button.setTextColor(resources.getColor(R.color.white, resources.newTheme()))
+    }
+
+    private fun showErrorPopup(kamuDaPopup: KamuDaPopup) {
+        val dialogFragment = ResponseHandlingDialogFragment.newInstance(
+            title = kamuDaPopup.title,
+            message = kamuDaPopup.message,
+            positiveButtonText = kamuDaPopup.positiveButtonText,
+            negativeButtonText = kamuDaPopup.negativeButtonText,
+            type = kamuDaPopup.type,
+        ).apply { setNegativeActionListener { viewModel.resetShowErrorPopup() } }
+        dialogFragment.show(childFragmentManager, "custom_dialog")
+    }
+
+    private fun showCommonErrorScreen() {
+        //mainActivity.binding.navView.visibility = View.GONE
+        binding.lytCommonErrorScreenIncluded.visibility = View.VISIBLE
     }
 
 }
